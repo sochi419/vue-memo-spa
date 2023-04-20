@@ -1,39 +1,48 @@
 <script>
 export default {
-  data: function () {
+  data() {
     return {
-      storageKey: 'todolist',
-      newtodo: '',
-      todolist: []
+      storageKey: 'todoList',
+      newTodo: '',
+      todoList: []
     }
   },
-
   methods: {
-    addTodo: function () {
-      this.todolist.push({ text: this.newtodo })
-      localStorage.setItem(this.storageKey, JSON.stringify(this.todolist))
-      this.newtodo = ''
+    add() {
+      if (this.newTodo.trim() === '') {
+        return
+      }
+      for (let i = 0; i < this.todoList.length; i++) {
+        this.todoList[i].done = false
+      }
+      this.todoList.push({ text: this.newTodo, editText: '' })
+      localStorage.setItem(this.storageKey, JSON.stringify(this.todoList))
+      this.newTodo = ''
     },
-    remove: function (index) {
-      this.todolist.splice(index, 1)
-      localStorage.setItem(this.storageKey, JSON.stringify(this.todolist))
+    remove(index) {
+      this.todoList.splice(index, 1)
+      localStorage.setItem(this.storageKey, JSON.stringify(this.todoList))
     },
-    update: function (index) {
-      this.todolist.splice(index, 1, { text: this.newtodo })
-      localStorage.setItem(this.storageKey, JSON.stringify(this.todolist))
-      this.newtodo = ''
+    update(index) {
+      const todo = this.todoList[index]
+      if (todo.editText !== '') {
+        todo.text = todo.editText
+        todo.editText = ''
+        localStorage.setItem(this.storageKey, JSON.stringify(this.todoList))
+      }
+    },
+    setEditTodoValue(todo, index) {
+      this.todoList[index].editText = todo.text
     }
   },
-
   created() {
-    var dataStr = localStorage.getItem(this.storageKey)
+    const dataStr = localStorage.getItem(this.storageKey)
     if (dataStr) {
-      this.todolist = JSON.parse(dataStr)
+      this.todoList = JSON.parse(dataStr)
+      for (let i = 0; i < this.todoList.length; i++) {
+        this.todoList[i].done = false
+      }
     }
-  },
-
-  todolist: function () {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.todolist))
   }
 }
 </script>
@@ -46,40 +55,22 @@ export default {
         name="message"
         cols="30"
         rows="7"
-        v-model="newtodo"
+        v-model="newTodo"
         placeholder="memo内容を入力してください "
       ></textarea>
-      <button @click="addTodo">追加</button>
+      <button @click="add">追加</button>
 
       <ul>
-        <li v-for="(todo, index) in todolist">
-          <input type="checkbox" v-model="todo.done" />
-          <span>{{ todo.text.split(/\n/)[0] }}</span>
+        <li v-for="(todo, index) in todoList" :key="index">
+          <label>
+            <input type="checkbox" v-model="todo.done" @change="setEditTodoValue(todo, index)" />
+            <span @click="todo.done = !todo.done">{{ todo.text }}</span>
+          </label>
+          <input type="text" v-show="todo.done" v-model="todo.editText" />
+          <button @click="update(index)" v-show="todo.done">編集</button>
+          <button @click="remove(index)" v-show="todo.done">削除</button>
         </li>
       </ul>
     </div>
   </main>
-
-  <div>
-    <div v-for="(todo, index) in todolist">
-      <div id="app" v-if="todo.done">
-        <textarea
-          id="message"
-          name="message"
-          cols="30"
-          rows="7"
-          type="text"
-          v-model="newtodo"
-          placeholder="編集内容を入力してください "
-          v-show="todo.done"
-        ></textarea
-        ><br /><button @click="update(index)" v-show="todo.done">編集</button><br /><button
-          @click="remove(index)"
-          v-show="todo.done"
-        >
-          削除
-        </button>
-      </div>
-    </div>
-  </div>
 </template>
