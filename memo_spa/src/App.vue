@@ -64,7 +64,7 @@ export default {
         <li v-for="(todo, index) in todoList" :key="index">
           <label>
             <input type="checkbox" v-model="todo.done" @change="setEditTodoValue(todo, index)" />
-            <span @click="todo.done = !todo.done">{{ todo.text }}</span>
+            <span @click="todo.done = !todo.done">{{ todo.text.split('\n')[0] }}</span>
           </label>
           <input type="text" v-show="todo.done" v-model="todo.editText" />
           <button @click="update(index)" v-show="todo.done">編集</button>
