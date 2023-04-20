@@ -62,10 +62,7 @@ export default {
 
       <ul>
         <li v-for="(memo, index) in memoList" :key="index">
-          <label>
-            <input type="checkbox" v-model="memo.done" @change="setEditMemoValue(memo, index)" />
-            <span @click="memo.done = !memo.done">{{ memo.text.split('\n')[0] }}</span>
-          </label>
+          <span @click="memo.done = !memo.done">{{ memo.text.split('\n')[0] }}</span>
           <input type="text" v-show="memo.done" v-model="memo.editText" />
           <button @click="update(index)" v-show="memo.done">編集</button>
           <button @click="remove(index)" v-show="memo.done">削除</button>
@@ -74,3 +71,13 @@ export default {
     </div>
   </main>
 </template>
+
+<style>
+li:hover {
+  cursor: pointer;
+}
+
+li:hover span {
+  color: blue;
+}
+</style>
