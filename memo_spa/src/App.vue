@@ -1,10 +1,39 @@
+<template>
+  <div id="app">
+    <div class="memo_list">
+      <ul>
+        <li v-for="(memo, index) in memoList" :key="index">
+          <span @click="selectedMemo = memo">{{ memo.text.split('\n')[0] }}</span>
+        </li>
+        <li @click="addMemo = !addMemo">+</li>
+      </ul>
+    </div>
+
+    <div class="form" v-if="selectedMemo || addMemo">
+      <textarea
+        id="message"
+        name="message"
+        cols="30"
+        rows="7"
+        v-model="selectedMemo.editText"
+        placeholder="memo内容を入力してください "
+      ></textarea>
+      <button @click="add" v-show="addMemo">追加</button>
+      <button @click="update(memoList.indexOf(selectedMemo))" v-show="selectedMemo">更新</button>
+      <button @click="remove(memoList.indexOf(selectedMemo))" v-show="selectedMemo">削除</button>
+    </div>
+  </div>
+</template>
+
 <script>
 export default {
   data() {
     return {
       storageKey: 'memoList',
       newMemo: '',
-      memoList: []
+      memoList: [],
+      selectedMemo: null,
+      addMemo: false
     }
   },
   methods: {
@@ -22,6 +51,7 @@ export default {
     remove(index) {
       this.memoList.splice(index, 1)
       localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
+      this.selectedMemo = null
     },
     update(index) {
       const memo = this.memoList[index]
@@ -29,6 +59,7 @@ export default {
         memo.text = memo.editText
         memo.editText = ''
         localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
+        this.selectedMemo = null
       }
     },
     setEditMemoValue(memo, index) {
@@ -46,31 +77,6 @@ export default {
   }
 }
 </script>
-
-<template>
-  <main>
-    <div id="app">
-      <textarea
-        id="message"
-        name="message"
-        cols="30"
-        rows="7"
-        v-model="newMemo"
-        placeholder="memo内容を入力してください "
-      ></textarea>
-      <button @click="add">追加</button>
-
-      <ul>
-        <li v-for="(memo, index) in memoList" :key="index">
-          <span @click="memo.done = !memo.done">{{ memo.text.split('\n')[0] }}</span>
-          <input type="text" v-show="memo.done" v-model="memo.editText" />
-          <button @click="update(index)" v-show="memo.done">編集</button>
-          <button @click="remove(index)" v-show="memo.done">削除</button>
-        </li>
-      </ul>
-    </div>
-  </main>
-</template>
 
 <style>
 li:hover {
