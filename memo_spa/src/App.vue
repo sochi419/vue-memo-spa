@@ -5,11 +5,23 @@
         <li v-for="(memo, index) in memoList" :key="index">
           <span @click="selectedMemo = memo">{{ memo.text.split('\n')[0] }}</span>
         </li>
-        <li @click="addMemo = !addMemo">+</li>
+        <li><span @click="addMemo = !addMemo">+</span></li>
       </ul>
     </div>
 
-    <div class="form" v-if="selectedMemo || addMemo">
+    <div class="addform" v-if="addMemo">
+      <textarea
+        id="message"
+        name="message"
+        cols="30"
+        rows="7"
+        v-model="newMemo"
+        placeholder="memo内容を入力してください "
+      ></textarea>
+      <button @click="add">追加</button>
+    </div>
+
+    <div class="editform" v-if="selectedMemo !== null">
       <textarea
         id="message"
         name="message"
@@ -18,9 +30,8 @@
         v-model="selectedMemo.editText"
         placeholder="memo内容を入力してください "
       ></textarea>
-      <button @click="add" v-show="addMemo">追加</button>
-      <button @click="update(memoList.indexOf(selectedMemo))" v-show="selectedMemo">更新</button>
-      <button @click="remove(memoList.indexOf(selectedMemo))" v-show="selectedMemo">削除</button>
+      <button @click="update(memoList.indexOf(selectedMemo))">更新</button>
+      <button @click="remove(memoList.indexOf(selectedMemo))">削除</button>
     </div>
   </div>
 </template>
