@@ -3,9 +3,11 @@
     <div class="memo_list">
       <ul>
         <li v-for="(memo, index) in memoList" :key="index">
-          <span @click="selectedMemo = memo, addMemo = false">{{ memo.text.split('\n')[0] }}</span>
+          <span @click=";(selectedMemo = memo), (addMemo = false)">{{
+            memo.text.split('\n')[0]
+          }}</span>
         </li>
-        <li><span @click="addMemo = !addMemo, selectedMemo = null">+</span></li>
+        <li><span @click=";(addMemo = !addMemo), (selectedMemo = null)">+</span></li>
       </ul>
     </div>
 
@@ -13,8 +15,8 @@
       <textarea
         id="message"
         name="message"
-        cols="30"
-        rows="7"
+        cols="50"
+        rows="10"
         v-model="newMemo"
         placeholder="memo内容を入力してください "
       ></textarea>
@@ -25,8 +27,8 @@
       <textarea
         id="message"
         name="message"
-        cols="30"
-        rows="7"
+        cols="50"
+        rows="10"
         v-model="selectedMemo.editText"
         placeholder="memo内容を入力してください "
       ></textarea>
@@ -94,6 +96,20 @@ export default {
 </script>
 
 <style>
+.memo_list {
+  position: fixed;
+  left: 300px;
+  top: 250px;
+}
+
+.editform {
+  left: 500px;
+}
+
+.addform {
+  left: 500px;
+}
+
 li:hover {
   cursor: pointer;
 }
