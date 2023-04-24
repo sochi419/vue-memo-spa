@@ -13,8 +13,6 @@
 
     <div class="addform" v-if="addMemo">
       <textarea
-        id="message"
-        name="message"
         cols="50"
         rows="10"
         v-model="newMemo"
@@ -25,8 +23,6 @@
 
     <div class="editform" v-if="selectedMemo !== null">
       <textarea
-        id="message"
-        name="message"
         cols="50"
         rows="10"
         v-model="selectedMemo.editText"
