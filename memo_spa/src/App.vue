@@ -3,9 +3,9 @@
     <div class="memo_list">
       <ul>
         <li v-for="(memo, index) in memoList" :key="index">
-          <span @click="selectedMemo = memo">{{ memo.text.split('\n')[0] }}</span>
+          <span @click="selectedMemo = memo, addMemo = false">{{ memo.text.split('\n')[0] }}</span>
         </li>
-        <li><span @click="addMemo = !addMemo">+</span></li>
+        <li><span @click="addMemo = !addMemo, selectedMemo = null">+</span></li>
       </ul>
     </div>
 
