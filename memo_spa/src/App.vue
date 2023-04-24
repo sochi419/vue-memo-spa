@@ -72,9 +72,13 @@ export default {
         localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
         this.selectedMemo = null
       }
-    },
-    setEditMemoValue(memo, index) {
-      this.memoList[index].editText = memo.text
+    }
+  },
+  watch: {
+    selectedMemo(newMemo) {
+      if (newMemo !== null) {
+        newMemo.editText = newMemo.text
+      }
     }
   },
   created() {
