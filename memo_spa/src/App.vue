@@ -3,7 +3,7 @@
     <div class="memo_list">
       <ul>
         <li v-for="(memo, index) in memoList" :key="index">
-          <span @click=";(selectedMemo = memo), (addMemo = false)">{{
+          <span @click=";(selectedMemo = memo), (addMemo = false), (editMemoValue = memo.text)">{{
             memo.text.split('\n')[0]
           }}</span>
         </li>
@@ -22,12 +22,7 @@
     </div>
 
     <div class="editform" v-if="selectedMemo !== null">
-      <textarea
-        cols="50"
-        rows="10"
-        v-model="selectedMemo.editText"
-        placeholder="memo内容を入力してください "
-      ></textarea>
+      <textarea cols="50" rows="10" v-model="editMemoValue"></textarea>
       <button @click="update(memoList.indexOf(selectedMemo))">更新</button>
       <button @click="remove(memoList.indexOf(selectedMemo))">削除</button>
     </div>
@@ -42,7 +37,8 @@ export default {
       newMemo: '',
       memoList: [],
       selectedMemo: null,
-      addMemo: false
+      addMemo: false,
+      editMemoValue: ''
     }
   },
   methods: {
@@ -50,10 +46,7 @@ export default {
       if (this.newMemo.trim() === '') {
         return
       }
-      for (let i = 0; i < this.memoList.length; i++) {
-        this.memoList[i].done = false
-      }
-      this.memoList.push({ text: this.newMemo, editText: '' })
+      this.memoList.push({ text: this.newMemo })
       localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
       this.newMemo = ''
     },
@@ -64,18 +57,10 @@ export default {
     },
     update(index) {
       const memo = this.memoList[index]
-      if (memo.editText !== '') {
-        memo.text = memo.editText
-        memo.editText = ''
+      if (this.editMemoValue !== '') {
+        memo.text = this.editMemoValue
         localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
         this.selectedMemo = null
-      }
-    }
-  },
-  watch: {
-    selectedMemo(newMemo) {
-      if (newMemo !== null) {
-        newMemo.editText = newMemo.text
       }
     }
   },
@@ -83,9 +68,6 @@ export default {
     const dataStr = localStorage.getItem(this.storageKey)
     if (dataStr) {
       this.memoList = JSON.parse(dataStr)
-      for (let i = 0; i < this.memoList.length; i++) {
-        this.memoList[i].done = false
-      }
     }
   }
 }
