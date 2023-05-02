@@ -2,7 +2,7 @@
   <div id="app">
     <div class="memo_list">
       <ul>
-        <li v-for="(memo, index) in memoList" :key="index">
+        <li v-for="memo in memoList" :key="memo.id">
           <span @click="displayMemoForm(memo)">{{ memo.text.split('\n')[0] }}</span>
         </li>
         <li><span @click="displayAddMemoForm">+</span></li>
@@ -44,7 +44,7 @@ export default {
       if (this.newMemo.trim() === '') {
         return
       }
-      this.memoList.push({ text: this.newMemo })
+      this.memoList.push({ text: this.newMemo, id: Date.now() })
       localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
       this.newMemo = ''
     },
