@@ -3,11 +3,9 @@
     <div class="memo_list">
       <ul>
         <li v-for="(memo, index) in memoList" :key="index">
-          <span @click=";(selectedMemo = memo), (addMemo = false), (editMemoValue = memo.text)">{{
-            memo.text.split('\n')[0]
-          }}</span>
+          <span @click="displayMemoForm(memo)">{{ memo.text.split('\n')[0] }}</span>
         </li>
-        <li><span @click=";(addMemo = !addMemo), (selectedMemo = null)">+</span></li>
+        <li><span @click="displayAddMemoForm">+</span></li>
       </ul>
     </div>
 
@@ -62,6 +60,12 @@ export default {
         localStorage.setItem(this.storageKey, JSON.stringify(this.memoList))
         this.selectedMemo = null
       }
+    },
+    displayMemoForm(memo) {
+      ;(this.selectedMemo = memo), (this.addMemo = false), (this.editMemoValue = memo.text)
+    },
+    displayAddMemoForm() {
+      ;(this.addMemo = !this.addMemo), (this.selectedMemo = null)
     }
   },
   created() {
