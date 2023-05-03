@@ -62,10 +62,13 @@ export default {
       }
     },
     displayMemoForm(memo) {
-      ;(this.selectedMemo = memo), (this.addMemo = false), (this.editMemoValue = memo.text)
+      this.selectedMemo = memo,
+      this.addMemo = false
+      this.editMemoValue = memo.text
     },
     displayAddMemoForm() {
-      ;(this.addMemo = !this.addMemo), (this.selectedMemo = null)
+      this.addMemo = !this.addMemo,
+      this.selectedMemo = null
     }
   },
   created() {
